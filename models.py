@@ -1,6 +1,6 @@
 ﻿import tensorflow as tf
 from tensorflow.keras import layers, models, Input  
-from tensorflow.keras.layers import Lambda , GlobalAveragePooling2D #Add by bun 載入標準化及池化層測試
+from tensorflow.keras.layers import Lambda , GlobalAveragePooling2D , MaxPooling2D#Add by bun 載入標準化及池化層測試
 from tensorflow.keras import regularizers # 導入正則化器 Add by test nvidia cnn model
 import config
 
@@ -109,8 +109,39 @@ def create_autodrive_model(input_shape=(input_height, input_width, input_channel
     image_features = layers.Dropout(0.5, name='dropout_cnn_features')(image_features) # 在壓縮後應用 Dropout
     """
     # Add by bun
-    image_features = GlobalAveragePooling2D(name='global_average_pooling')(x)
+    # image_features = GlobalAveragePooling2D(name='global_average_pooling')(x)
 
+    # Modify by bun to UNITY CHANGE
+
+    # Mark by bun 減少參數數量嘗試
+    # 這裡將 GlobalAveragePooling2D 替換為 Flatten 和 Dense 層，以解決 ONNX 轉換問題
+    # Flatten 層將 2D 的特徵圖轉換成 1D 的向量，以便傳遞給全連接層。
+    # x = layers.Flatten(name='flatten')(x)
+    # Flatten 輸出維度計算: 64 * 39 * 73 = 182,304 個神經元
+
+    """
+    # 新增於 Flatten 後添加 Dense 層來壓縮圖像特徵
+    # Dense 層將龐大的圖像特徵向量壓縮到 256 維，減少計算量並避免過擬合。
+    image_features = layers.Dense(256, name='cnn_features_dense')(x) # 壓縮到 256 維
+    image_features = layers.BatchNormalization(name='bn_cnn_features')(image_features)
+    image_features = layers.Activation('elu', name='elu_cnn_features')(image_features)
+    # Dropout 層隨機關閉一部分神經元，進一步防止過擬合。
+    image_features = layers.Dropout(0.5, name='dropout_cnn_features')(image_features) # 在壓縮後應用 Dropout
+    """
+
+    # Try ONNX used. 測試ONNX，是否可以正常運作
+    # **新增**：在 Flatten 之前，先使用 MaxPooling2D 對特徵圖進行下採樣。
+    x = layers.MaxPooling2D(pool_size=(2, 2))(x)
+
+    # **新增**：Flatten 層將 2D 特徵圖轉換成 1D 向量。
+    x = layers.Flatten(name='flatten')(x)
+
+    # **新增**：新增 Dense 層來壓縮圖像特徵。
+    image_features = layers.Dense(256, name='cnn_features_dense')(x)
+    image_features = layers.BatchNormalization(name='bn_cnn_features')(image_features)
+    image_features = layers.Activation('elu', name='elu_cnn_features')(image_features)
+    image_features = layers.Dropout(0.5, name='dropout_cnn_features')(image_features)
+    
 
     # --- 2. 感測器輸入處理分支 (全連接層) ---
     # Input 層專門接收來自感測器的數值數據。

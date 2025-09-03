@@ -91,8 +91,8 @@ def train(data_folder='./data',
         # 可以為不同的損失設定個別權重，例如給轉向角更多的權重
         # loss_weights 可以調整不同損失函數的重要性，這裡先保持相等，越小越重要
         loss_weights={
-            'steering_output': 0.5,
-            'throttle_output': 1.0,
+            'steering_output': 1.0,
+            'throttle_output': 0.5,
         },
         # 為每個輸出添加監控指標
         metrics={

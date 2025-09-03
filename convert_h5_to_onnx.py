@@ -8,7 +8,7 @@ import config
 
 # === 1. 基本參數設定 ===
 H5_PATH = config.MODEL_PATH        # 輸入的 Keras .h5 檔案名稱
-ONNX_PATH = "./car_control_model.bytes"    # 輸出的 ONNX 檔案名稱
+ONNX_PATH = "./car_control_model.onnx"    # 輸出的 ONNX 檔案名稱
 
 # === 2. 載入 Keras 模型 ===
 print(f"[INFO] Loading Keras model from {H5_PATH} ...")

@@ -11,7 +11,7 @@ UNITY_PORT = 12352
 # 資料夾參數區
 # =========================================================================
 # Create data list sensor
-TIMESTAMP_NAME = '20250815_090005'
+TIMESTAMP_NAME = '20250728_184331'
 LOG_PATH = 'C:/Users/User/source/repos/Car02/Event/Event_'+TIMESTAMP_NAME+'.txt'   # log檔路徑 
 SENSOR_PATH = 'C:/Users/User/source/repos/Car02/Log/Log_'+TIMESTAMP_NAME+'.txt'   # sensor檔路徑
 IMAGE_FOLDER = 'C:/Users/User/source/repos/Car02/Cam01/'+TIMESTAMP_NAME         # 照片資料夾
@@ -26,7 +26,7 @@ USER_NAME = 'User'
 # USER_NAME = 'Clary Lin'
 BASE_DIR = "C:/Users/"+USER_NAME+"/source/repos/Car02/Cam01/" # 圖檔資料夾位置
 SENSOR_DIR = "C:/Users/"+USER_NAME+"/source/repos/Car02/Log/" # 感測器資訊位置
-MODEL_PATH = "./checkpoints/model_epoch_012.h5" # 讀取訓練模型位置
+MODEL_PATH = "./checkpoints/model_epoch_001.h5" # 讀取訓練模型位置
 # MODEL_SAVE_PATH = 'saved_models/my_multi_modal_cnn_model.h5' # 模型保存路徑
 # BASE_DIR = "C:/Users/Clary Lin/Downloads/20250706Car01/20250506Car01/Car0706/Cam01/" # 圖檔資料夾位置
 # SENSOR_DIR = "C:/Users/Clary Lin/Downloads/20250706Car01/20250506Car01/Car0706/Log/" # 感測器資訊位置
@@ -79,8 +79,9 @@ LABEL_RANGES = {
 # 模型輸入維度 (感測器部分)
 # 根據 SENSOR_RANGES 中定義的感測器數量計算而來:
 # rotation_xyz (3) + angular_velocity_xyz (3) + speed (1) + rollAngle (1) + distance (4) = 12
+# 0903 嘗試新增 車道線資訊
 # =========================================================================
-SENSOR_INPUT_DIM = 12
+SENSOR_INPUT_DIM = 13
 
 # =========================================================================
 # Add by bun for test -1 to 1
